@@ -1,0 +1,15 @@
+# @format
+
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: nvda-server-config
+  namespace: nvda
+
+data:
+  NVDARemoteServer.conf: |
+    Port=6837
+    LogLevel=2
+    certificate=/usr/share/NVDARemoteServer/server.pem
+    keyfile=/usr/share/NVDARemoteServer/key.pem

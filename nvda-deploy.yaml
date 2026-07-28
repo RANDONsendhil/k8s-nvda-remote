@@ -1,0 +1,59 @@
+# @format
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: nvda-server-deployment
+  labels:
+    app: nvda-server
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: nvda-server
+
+  template:
+    metadata:
+      labels:
+        app: nvda-server
+
+    spec:
+      containers:
+        - name: nvda-server
+          image: jmdaweb/nvda-remote-server
+
+          ports:
+            - name: nvda
+              containerPort: 6837
+              protocol: TCP
+
+          volumeMounts:
+            # Configuration
+            - name: nvda-config
+              mountPath: /data/NVDARemoteServer.conf
+              subPath: NVDARemoteServer.conf
+
+            # Certificate
+            - name: nvda-certificate
+              mountPath: /usr/share/NVDARemoteServer/server.pem
+              subPath: server.pem
+              readOnly: true
+
+            - name: nvda-certificate
+              mountPath: /usr/share/NVDARemoteServer/key.pem
+              subPath: key.pem
+              readOnly: true
+
+      volumes:
+        # ConfigMap
+        - name: nvda-config
+          configMap:
+            name: nvda-server-config
+
+        # Secret certificate
+        - name: nvda-certificate
+          secret:
+            secretName: nvda-certificate

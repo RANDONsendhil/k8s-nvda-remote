@@ -1,0 +1,17 @@
+# @format
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nvda-server-relay
+  namespace: nvda
+
+spec:
+  selector:
+    app: nvda-server
+
+  ports:
+    - name: nvda
+      port: 6837
+      targetPort: 6837
+      protocol: TCP
